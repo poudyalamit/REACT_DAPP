@@ -17,7 +17,7 @@ contract chai {
         owner = payable(msg.sender);
     }
     function buy(string memory name, string memory message) public payable  {
-        require(msg.value>0, "Pay more tham zero ether");
+        require(msg.value>0, "Pay more than zero ether");
         owner.transfer(msg.value);
         memos.push(Memo(name,message,block.timestamp,msg.sender));
     }

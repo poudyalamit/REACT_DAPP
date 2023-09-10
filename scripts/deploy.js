@@ -6,23 +6,48 @@
 // global scope, and execute the script.
 const hre = require("hardhat");
 
+async function getBalance(address) {
+  const balance = await hre.ethers.provider.getBalance(address);
+  return hre.ethers.formatEther(balance);
+}
+
+async function consoleBalance(addresses) {
+  let counter = 0;
+  for (const address of addresses) {
+    console.log(`Address ${counter} balance:`, await getBalance(address));
+    counter++;
+  }
+}
+
+async function consoleMemos(memos) {
+  for (const memo of memos) {
+    const timestamp = memo.timestamp;
+    const name = memo.name;
+    const from = memo.address;
+    const message = memo.message;
+
+    console.log(`At ${timestamp}, name: ${name}, address: ${from}, message: ${message}`);
+  }
+}
+
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const unlockTime = currentTimestampInSeconds + 60;
+  const [owner, from1, from2,from3] = await hre.ethers.getSigners();
+  const chai = await hre.ethers.getContractFactory('chai');
+  const contract = await chai.deploy(); //instance of contract
 
-  const lockedAmount = hre.ethers.parseEther("0.001");
+  await contract.waitForDeployment();
+  console.log("Address of contract:", contract.address);
 
-  const lock = await hre.ethers.deployContract("Lock", [unlockTime], {
-    value: lockedAmount,
-  });
+  const addresses=[owner.address,from1.address,from2.address,from3.address];
+  console.log("Before chai");
+  await consoleBalance(addresses);
 
-  await lock.waitForDeployment();
-
-  console.log(
-    `Lock with ${ethers.formatEther(
-      lockedAmount
-    )}ETH and unlock timestamp ${unlockTime} deployed to ${lock.target}`
-  );
+  const amount= {value: hre.ethers.parseEther("1")};
+  await contract.connect(from1).buy("from1","very good",amount);
+  await contract.connect(from2).buy("from2","very good",amount);
+  await contract.connect(from3).buy("from3","very good",amount);
+  console.log("After chai");
+  await consoleBalance(addresses);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
