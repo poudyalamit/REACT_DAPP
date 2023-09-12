@@ -23,7 +23,7 @@ async function consoleMemos(memos) {
   for (const memo of memos) {
     const timestamp = memo.timestamp;
     const name = memo.name;
-    const from = memo.address;
+    const from = memo.from;
     const message = memo.message;
 
     console.log(`At ${timestamp}, name: ${name}, address: ${from}, message: ${message}`);
@@ -48,6 +48,9 @@ async function main() {
   await contract.connect(from3).buy("from3","very good",amount);
   console.log("After chai");
   await consoleBalance(addresses);
+
+  const memos= await contract.get();
+  consoleMemos(memos);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
