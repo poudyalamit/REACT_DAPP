@@ -1,11 +1,11 @@
 const hre = require("hardhat");
 
 async function main(){
-    const chai = await hre.ethers.getContractFactory('chai');
-    const contract = await chai.deploy(); //instance of contract
+    const chai = await hre.ethers.deployContract('chai');
   
-    await contract.waitForDeployment();
-    console.log("Address of contract:", contract.address);
+    await chai.waitForDeployment();
+    console.log("Address of contract:", await chai.getAddress());
+
   
 }
 

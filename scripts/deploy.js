@@ -26,24 +26,24 @@ async function consoleMemos(memos) {
 
 async function main() {
   const [owner, from1, from2,from3] = await hre.ethers.getSigners();
-  const chai = await hre.ethers.getContractFactory('chai');
-  const contract = await chai.deploy(); //instance of contract
+  const chai = await hre.ethers.deployContract('chai');
+  // const contract = await chai.deploy(); //instance of contract
 
-  await contract.waitForDeployment();
-  console.log("Address of contract:", contract.address);
+  await chai.waitForDeployment();
+  console.log("Address of contract:", await chai.getAddress());
 
   const addresses=[owner.address,from1.address,from2.address,from3.address];
   console.log("Before chai");
   await consoleBalance(addresses);
 
   const amount= {value: hre.ethers.parseEther("1")};
-  await contract.connect(from1).buy("from1","very good",amount);
-  await contract.connect(from2).buy("from2","very good",amount);
-  await contract.connect(from3).buy("from3","very good",amount);
+  await chai.connect(from1).buy("from1","very good",amount);
+  await chai.connect(from2).buy("from2","very good",amount);
+  await chai.connect(from3).buy("from3","very good",amount);
   console.log("After chai");
   await consoleBalance(addresses);
 
-  const memos= await contract.get();
+  const memos= await chai.get();
   consoleMemos(memos);
 }
 

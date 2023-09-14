@@ -1,23 +1,41 @@
-import logo from './logo.svg';
+import abi from './contract/chai.json'
+import { useState, useEffect } from 'react'
+import { ethers } from 'ethers';
+import Buy from './components/Buy';
+import Memos from './components/Memos';
 import './App.css';
-
 function App() {
+  //useful template
+  const [state, setState] = useState({
+    provider: null,
+    signer: null,
+    contract: null
+  })
+  useEffect(() => {
+    const connectWallet = async () => {
+      const contractAddress = "0x2f706F96369BFb0327adC9C36Af1b1FD5799A360";
+      const contractAbi = abi.abi;
+      try {
+        const { ethereum } = window;
+        if (ethereum) {
+          const account = await ethereum.request({ method: "eth_requestAccounts", })
+        }
+        const provider = new ethers.BrowserProvider(ethereum);
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(contractAddress, contractAbi, signer);
+        
+        setState({ provider, signer, contract });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    connectWallet();
+  }, [])
+  console.log(state);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Buy state={state} />
+      <Memos/>
     </div>
   );
 }
