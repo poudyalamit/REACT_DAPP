@@ -18,12 +18,12 @@ function App() {
       try {
         const { ethereum } = window;
         if (ethereum) {
+          // eslint-disable-next-line
           const account = await ethereum.request({ method: "eth_requestAccounts", })
         }
         const provider = new ethers.BrowserProvider(ethereum);
-        const signer = provider.getSigner();
+        const signer = await provider.getSigner();
         const contract = new ethers.Contract(contractAddress, contractAbi, signer);
-        
         setState({ provider, signer, contract });
       } catch (error) {
         console.log(error);
@@ -31,11 +31,10 @@ function App() {
     }
     connectWallet();
   }, [])
-  console.log(state);
   return (
     <div className="App">
       <Buy state={state} />
-      <Memos/>
+      <Memos state={state}/>
     </div>
   );
 }
