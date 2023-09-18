@@ -1,4 +1,4 @@
-import abi from './contract/chai.json'
+import abi from './contract/chiya.json'
 import { useState, useEffect } from 'react'
 import { ethers } from 'ethers';
 import Buy from './components/Buy';
@@ -32,9 +32,14 @@ function App() {
     connectWallet();
   }, [])
   return (
-    <div className="App">
+    <div >
+      <div >
+      <img style={{width:"100%"}} src="/Img.png" alt="" />
+      </div>
+      <div className='container'>
       <Buy state={state} />
       <Memos state={state}/>
+      </div>
     </div>
   );
 }
