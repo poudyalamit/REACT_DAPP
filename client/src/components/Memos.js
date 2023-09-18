@@ -15,7 +15,6 @@ const Memos = ({ state }) => {
         <>
             <p style={{ textAlign: "center", marginTop: "20px" }}>Messages</p>
             {memos.map((memo) => {
-                console.log(memo);
                 return (
                     <div
                         className="container-fluid"
@@ -35,7 +34,7 @@ const Memos = ({ state }) => {
                                             border: "1px solid white",
                                             borderCollapse: "collapse",
                                             padding: "7px",
-                                            width: "100px",
+                                            width: "300px",
                                         }}
                                     >
                                         {memo.name}
@@ -46,21 +45,10 @@ const Memos = ({ state }) => {
                                             border: "1px solid white",
                                             borderCollapse: "collapse",
                                             padding: "7px",
-                                            width: "800px",
-                                        }}
-                                    >
-                                        {memo.message}
-                                    </td>
-                                    <td
-                                        style={{
-                                            backgroundColor: "#96D4D4",
-                                            border: "1px solid white",
-                                            borderCollapse: "collapse",
-                                            padding: "7px",
                                             width: "300px",
                                         }}
                                     >
-                                          {new Date(memo.timestamp* 1000).toDateString()}
+                                        {memo.message}
                                     </td>
                                     <td
                                         style={{
@@ -72,6 +60,17 @@ const Memos = ({ state }) => {
                                         }}
                                     >
                                         {memo.from}
+                                    </td>
+                                    <td
+                                        style={{
+                                            backgroundColor: "#96D4D4",
+                                            border: "1px solid white",
+                                            borderCollapse: "collapse",
+                                            padding: "7px",
+                                            width: "600px",
+                                        }}
+                                    >
+                                        {new Date(Number(memo.timestamp) * 1000).toLocaleString()}
                                     </td>
                                 </tr>
                             </tbody>
